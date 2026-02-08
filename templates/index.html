@@ -1260,7 +1260,7 @@
         const newCity = document.getElementById("newCityName").value.trim();
         if (newCity) {
           try {
-            const res = await fetch("/api/suggest", {
+const res = await fetch("https://02081-production.up.railway.app/api/suggest", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -1293,7 +1293,7 @@
           ).map((el) => el.value);
 
           try {
-            const res = await fetch("/api/suggest", {
+const res = await fetch("https://02081-production.up.railway.app/api/suggest", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -1327,3 +1327,4 @@
     </script>
   </body>
 </html>
+
