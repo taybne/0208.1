@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib import sqla
@@ -60,8 +60,6 @@ admin.add_view(sqla.ModelView(Suggestion, db.session))
 admin.add_view(sqla.ModelView(SuggestionPhoto, db.session))
 
 # ===== API =====
-
-# 🔹 ДОБАВЛЕНИЕ ГОРОДА ИЗ ВЕБА
 @app.route('/api/add-city', methods=['POST'])
 def add_city():
     if not request.is_json:
@@ -80,17 +78,14 @@ def add_city():
     city = City(name=name, slug=slug)
     db.session.add(city)
     db.session.commit()
-
     return jsonify({'status': 'ok'})
 
-# 🔹 ПРЕДЛОЖЕНИЯ
 @app.route('/api/suggest', methods=['POST'])
 def suggest():
     if not request.is_json:
         return jsonify({'error': 'Expected JSON'}), 400
 
     data = request.get_json(silent=True)
-
     suggestion = Suggestion(
         type=data.get('type'),
         city=data.get('city'),
@@ -99,19 +94,15 @@ def suggest():
         user_id=data.get('user_id'),
         nickname=data.get('nickname')
     )
-
     db.session.add(suggestion)
     db.session.commit()
-
     return jsonify({'status': 'ok'})
 
-# 🔹 ГОРОДА
 @app.route('/api/cities')
 def get_cities():
     cities = City.query.all()
     return jsonify([{'name': c.name, 'slug': c.slug} for c in cities])
 
-# 🔹 ЛОКАЦИИ
 @app.route('/api/locations/<city_slug>')
 def get_locations(city_slug):
     city = City.query.filter_by(slug=city_slug).first()
@@ -132,16 +123,13 @@ def get_locations(city_slug):
         except Exception:
             return [val]
 
-    return jsonify([
-        {
-            'title': l.title,
-            'desc': l.description or '',
-            'themes': _parse_themes(l.theme),
-            'photos': json.loads(l.photos or '[]')
-        } for l in locations
-    ])
+    return jsonify([{
+        'title': l.title,
+        'desc': l.description or '',
+        'themes': _parse_themes(l.theme),
+        'photos': json.loads(l.photos or '[]')
+    } for l in locations])
 
-# 🔹 ФОТО
 @app.route('/api/photo-suggest', methods=['POST'])
 def photo_suggest():
     files = request.files.getlist('photos')
@@ -173,9 +161,7 @@ def photo_suggest():
 def index():
     return render_template("index.html")
 
-# ===== RUN =====
-from flask import send_from_directory
-
+# ===== STATIC & PHOTOS =====
 @app.route('/static/<path:filename>')
 def static_files(filename):
     return send_from_directory('static', filename)
@@ -183,6 +169,8 @@ def static_files(filename):
 @app.route('/photos/<path:filename>')
 def photos_files(filename):
     return send_from_directory('photos', filename)
+
+# ===== RUN =====
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
@@ -191,7 +179,6 @@ if __name__ == "__main__":
 
     print("🚀 http://localhost:8000/")
     print("👑 http://localhost:8000/admin/")
-
     app.run(host="0.0.0.0", port=8000, debug=True)
 
 
