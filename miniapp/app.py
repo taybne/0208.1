@@ -174,6 +174,15 @@ def index():
     return render_template("index.html")
 
 # ===== RUN =====
+from flask import send_from_directory
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
+
+@app.route('/photos/<path:filename>')
+def photos_files(filename):
+    return send_from_directory('photos', filename)
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
@@ -184,5 +193,6 @@ if __name__ == "__main__":
     print("👑 http://localhost:8000/admin/")
 
     app.run(host="0.0.0.0", port=8000, debug=True)
+
 
 
