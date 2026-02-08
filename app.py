@@ -11,7 +11,7 @@ import time
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # ===== APP =====
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config['SECRET_KEY'] = 'your-secret-key-change-it'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'tag.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -186,6 +186,7 @@ if __name__ == "__main__":
     print(f"👑 http://0.0.0.0:{port}/admin/")
     
     app.run(host="0.0.0.0", port=port, debug=True)  # ← ВНУТРИ if!
+
 
 
 
