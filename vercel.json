@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "miniapp/app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "miniapp/app.py"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "miniapp/static/$1"
+    },
+    {
+      "src": "/photos/(.*)",
+      "dest": "miniapp/photos/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "miniapp/app.py"
+    }
+  ]
+}
