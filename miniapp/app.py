@@ -173,17 +173,22 @@ def photo_suggest():
 def index():
     return render_template("index.html")
 
+import os  # ← ДОБАВЬТЕ В НАЧАЛО ФАЙЛА!
+
 # ===== RUN =====
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Railway = 8080!
+    
     with app.app_context():
         db.create_all()
         print("✅ БД готова")
         print("Cities:", City.query.count())
 
-    print("🚀 http://localhost:8000/")
-    print("👑 http://localhost:8000/admin/")
+    print(f"🚀 http://0.0.0.0:{port}/")
+    print(f"👑 http://0.0.0.0:{port}/admin/")
+    
+    app.run(host="0.0.0.0", port=port, debug=True)  # ← ВНУТРИ if!
 
-#app.run(host="0.0.0.0", port=8000, debug=True)
 
 
 
