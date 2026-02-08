@@ -174,18 +174,6 @@ def index():
     return render_template("index.html")
 
 # ===== RUN =====
-@app.route('/static/<path:filename>')
-def static_files(filename):
-    return send_from_directory('static', filename)
-
-@app.route('/photos/<path:filename>')
-def photos(filename):
-    return send_from_directory('photos', filename)
-
-@app.route('/api/<path:path>')
-@app.route('/api')
-def api_catch_all(path=''):
-    return app.py  # Flask сам разберётся с /api/suggest
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
@@ -196,4 +184,5 @@ if __name__ == "__main__":
     print("👑 http://localhost:8000/admin/")
 
     app.run(host="0.0.0.0", port=8000, debug=True)
+
 
